@@ -20,7 +20,7 @@
 </tr>
 <tr>
 	<td></td>
-	<td><input type="checkbox" name="usado" <?=$produto->getUsado()?> value="true"> Usado
+	<td><input type="checkbox" name="usado" <?php if ($produto->getUsado()){echo $selecao_usado;}?> value="true"> Usado
 </tr>
 <tr>
 	<td>Categoria</td>

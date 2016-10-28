@@ -14,16 +14,17 @@ function listaProdutos($conexao) {
 	while($produto_array = mysqli_fetch_assoc($resultado)) {
 		
 		$categoria = new Categoria();
-		$categoria->nome = $produto_array['categoria_nome'];
+		$categoria->setNomeCategoria( $produto_array['categoria_nome']);
 
-		$produto = new Produto();
-		$produto->setId($produto_array['id']);
-		$produto->setNome($produto_array['nome']);
-		$produto->setDescricao($produto_array['descricao']);
-		$produto->setCategoria($categoria);
-		$produto->setPreco($produto_array['preco']);
-		$produto->setUsado($produto_array['usado']);
+		
+		$id = $produto_array['id'];
+		$nome = $produto_array['nome'];
+		$descricao = $produto_array['descricao'];
+		$preco = $produto_array['preco'];
+		$usado = $produto_array['usado'];
 
+		$produto = new Produto($nome, $preco, $descricao, $categoria, $preco, $usado);
+		$produto->setId($id);
 		array_push($produtos, $produto);
 	}
 
@@ -31,22 +32,30 @@ function listaProdutos($conexao) {
 }
 
 function insereProduto($conexao, Produto $produto) {
+	$categoria = $produto->getCategoria();
+
 
 	$query = "insert into produtos (nome, preco, descricao, categoria_id, usado) 
-		values ('{$produto->nome}', {$produto->preco}, '{$produto->descricao}', 
-			{$produto->categoria->id}, {$produto->usado})";
+		values (
+		'{$produto->getNome()}',
+		{$produto->getPreco()},
+		'{$produto->getDescricao()}',
+		{$categoria->getIdCategoria()},
+		{$produto->getUsado()})";
 
 	return mysqli_query($conexao, $query);
 }
 
 function alteraProduto($conexao, Produto $produto) {
-
-	$query = "update produtos set nome = '{$produto->nome}', 
-		preco = {$produto->preco}, descricao = '{$produto->descricao}', 
-			categoria_id= {$produto->categoria->id}, usado = {$produto->usado} 
-				where id = '{$produto->id}'";
-
-	return mysqli_query($conexao, $query);
+	$categoria = $produto->getCategoria(); 
+	$query = "update produtos set nome = 
+	'{$produto->getNome()}',
+	preco = {$produto->getPreco()},
+	descricao = '{$produto->getDescricao()}', 
+	categoria_id= {$categoria->getIdCategoria()},
+	usado = {$produto->getUsado()}
+	where id = '{$produto->getId()}'";
+ 	return mysqli_query($conexao, $query);
 }
 
 function buscaProduto($conexao, $id) {
@@ -58,15 +67,15 @@ function buscaProduto($conexao, $id) {
 	$categoria->setIdCategoria ( $produto_array['categoria_id']);
 
 
-	$produto = new Produto();
-	$produto->setId ($produto_array['id']);
-	$produto->setNome ($produto_array['nome']);
-	$produto->setDescricao ($produto_array['descricao']);
-	$produto->setCategoria ($categoria);
-	$produto->setPreco ($produto_array['preco']);
-	$produto->setUsado ($produto_array['usado']);
+	$id = $produto_array['id'];
+	$nome = $produto_array['nome'];
+	$descricao = $produto_array['descricao'];
+	$categoria = $categoria;
+	$preco = $produto_array['preco'];
+	$usado = $produto_array['usado'];
 
-	
+	$produto = new Produto($nome, $preco, $descricao, $categoria, $preco, $usado);
+	$produto->setId($id);
 
 	return $produto;
 }

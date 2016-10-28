@@ -9,6 +9,15 @@ class Produto {
 	private $categoria;
 	private $usado;
 
+	function __construct($nome, $preco, $descricao, Categoria $categoria,  $usado)
+	{
+		$this->noem = $foo;
+		$this->nome = $nome;
+		$this->preco = $preco;
+		$this->descricao = $descricao;
+		$this->categoria = $categoria;
+		$this->usado = $usado;
+	}
 
 
 	#Set
@@ -16,26 +25,7 @@ class Produto {
 	{
 		$this->id = $id;
 	}
-	public function setNome($nome)
-	{
-		$this->nome = $nome;
-	}
-	public function setPreco($preco)
-	{
-		$this->preco = $preco;
-	}
-	public function setDescricao($descricao)
-	{
-		$this->descricao = $descricao;
-	}
-	public function setCategoria($categoria)
-	{
-		$this->categoria = $categoria;
-	}
-	public function setUsado($usado)
-	{
-		$this->usado = $usado;
-	}
+	
 
 	#gets
 	public function getId()
@@ -67,8 +57,14 @@ class Produto {
 	public function precoComDesconto ($desconto = 0.1)
 	{
 		$preco = $this->preco;
-		$preco = $preco - $preco * $desconto;
-		return $preco ;
+		if ($desconto > 0 && $desconto <= 0.5) {
+			$preco = $preco - $preco * $desconto;
+			return $preco ;	
+		}
+
+		$preco = $preco - $preco * 0.1;
+		return $preco ;	
+		
 	}
 
 
